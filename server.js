@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //GET /reviews/:product_id/list
 app.get("/reviews/1/list", (req, res) => {
   res.send(reviewsList)
+  
 });
 
 //GET /reviews/:product_id/meta
