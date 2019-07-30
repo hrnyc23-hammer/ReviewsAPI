@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const {reviewsList, ratings} = require('./exampleDB.js')
 // const morgan = require("morgan");
 
 const path = require("path");
@@ -20,9 +21,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   });
 // });
 
-app.get("/", (req, res) => {
-  res.send('testing')
+//GET /reviews/:product_id/list
+app.get("/reviews/1/list", (req, res) => {
+  res.send(reviewsList)
 });
+
+//GET /reviews/:product_id/meta
+app.get("/reviews/1/meta", (req, res) => {
+  res.send(ratings)
+});
+
+//POST /reviews/:product_id
+//PUT /reviews/helpful/:review_id
+//PUT /reviews/report/:review_id
+
 // // Catch all incase user refreshes on react-router handled url
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'), (err) => {
@@ -31,6 +43,9 @@ app.get("/", (req, res) => {
 //     }
 //   });
 // });
+
+
+
 
 const PORT = process.env.PORT || 5000;
 
