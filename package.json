@@ -1,0 +1,37 @@
+{
+  "name": "ratings-and-reviews",
+  "version": "1.0.0",
+  "description": "create api for ratings-and-reviews on greenfield project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -d --watch",
+    "start": "nodemon ./server.js",
+    "dev": "concurrently \"npm run start\" \"npm run build\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hrnyc23-hammer/ratings-and-reviews.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hrnyc23-hammer/ratings-and-reviews/issues"
+  },
+  "homepage": "https://github.com/hrnyc23-hammer/ratings-and-reviews#readme",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.1.1",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1"
+  }
+}
