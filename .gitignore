@@ -1,3 +1,6 @@
-/node_modules
-bundle.js
+/reviewsAPI/node_modules
+config.js
 /coverage
+/review_files
+mysqlTest.txt
+exampleDB.js

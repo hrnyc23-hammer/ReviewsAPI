@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db:
+    build: ./db
+    environment:
+      MYSQL_DATABASE: reviewapi
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: 123
+      DATABASE_HOST: db
+  web:
+    build: ./reviewsAPI
+    environment:
+      FLASK_ENV: development
+      DATABASE_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: reviewapi
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: 123
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    restart: on-failure
