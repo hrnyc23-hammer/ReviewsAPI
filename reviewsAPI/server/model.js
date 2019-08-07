@@ -1,217 +1,68 @@
 const sqlDb = require("./mySQL");
-// const Promise = require("promise");
-// const {promisify} = require('util')
 const moment = require("moment");
 const async = require("async");
 
 module.exports = {
-  getReviews: (req, res, product_id, callback) => {
-    let sql = `SELECT * FROM reviews 
-      WHERE reviews.product_id = ${product_id} 
-      AND reported != 1 LIMIT 5`;
-
-    sqlDb.query(sql, function(err, result) {
-      if (err) callback(null, "fail to get reviews data out");
-      else {
-        let returnObj = { product: product_id, page: 1, count: 5 };
-        let photos = [];
-        // console.log("value i: testing");
-        async.forEachOf(
-          result,
-          (ele, i, in_CB) => {
-            let sql2 = `SELECT id, review_url FROM review_photo
-            WHERE reviews_id = ${ele.reviews_id}`;
-
-            console.log("value i: testing 2 with reviews_id: ", i);
-
-            sqlDb.query(sql2, function(err, result2) {
-              if (err) in_CB(err, "fail to get photo data out");
-              else {
-                for (let i = 0; i < result2.length; i++) {
-                  result2[i].url = result2[i].review_url;
-                  delete result2[i].review_url;
-                }
-                photos.push(result2);
-                in_CB(null);
-              }
-            });
-          },
-          function(err, infor) {
-            if (err) callback(null, infor);
-            else {
-              for (let i = 0; i < result.length; i++) {
-                delete result[i].product_id;
-                result[i].data = result[i].review_date + "T00:00:00.000Z";
-                delete result[i].review_date;
-                result[i].photos = photos[i];
-                delete result[i].reviewer_email;
-              }
-              returnObj.results = result;
-              callback(null, returnObj);
-            }
-          }
-        );
-      }
-    });
-
-    // multiple select
-    // let sql = `SELECT value_, review_url
-    //   FROM characteristics, review_photo
-    //   WHERE characteristics.id = review_photo.id AND review_id = ${product_id} `;
-
-    // sqlDb.query(sql, function(err, result) {
-    //   if (err) callback(err, "fail to get data out");
-    //   else {
-    //     let returnObj = {};
-    //     callback(null, result);
-    //   }
-    // });
-  },
-
-  getRatings: (req, res, product_id, callback) => {
-    let sql = `SELECT rating, recommend
-      FROM reviews
-      WHERE product_id = ${product_id} `;
-
-    sqlDb.query(sql, function(err, result) {
-      if (err) callback(err, "fail to get rating data out");
-      else {
-        let obj = {};
-        let recomObj = {};
-        for (let i = 0; i < result.length; i++) {
-          if (obj[result[i].rating]) obj[result[i].rating]++;
-          else obj[result[i].rating] = 1;
-          if (recomObj[result[i].recommend]) recomObj[result[i].recommend]++;
-          else recomObj[result[i].recommend] = 1;
-        }
-        let newObj = {};
-        newObj.rating = obj;
-        newObj.recommend = recomObj;
-        callback(null, newObj);
-      }
-    });
-  },
-
-  getCharacteristics: (req, res, product_id, callback) => {
-    let sql = `SELECT *
-      FROM chara_list
-      WHERE product_id = ${product_id}`;
-
-    sqlDb.query(sql, function(err, result) {
-      if (err) callback(err, "fail to get characteristic data out");
-      else {
-        let obj = {};
-        let value = [];
-
-        async.forEachOf(
-          result,
-          (ele, i, in_CB) => {
-            let sql2 = `SELECT value_ FROM characteristics 
-            WHERE characteristic_id = ${ele["id"]}`;
-            sqlDb.query(sql2, function(err, result2) {
-              if (err) {
-                in_CB(err);
-              } else {
-                let sum = 0;
-                for (let i = 0; i < result2.length; i++) {
-                  sum += result2[i].value_;
-                }
-                let avg = sum / result2.length;
-                value.push(avg);
-                in_CB(null);
-              }
-            });
-          },
-          function(err) {
-            if (err) callback(err, "date");
-            else {
-              for (let i = 0; i < result.length; i++) {
-                obj[result[i].name_] = { id: result[i].id };
-                obj[result[i].name_].value = value[i].toString();
-              }
-              callback(null, obj);
-            }
-          }
-        );
-
-        // let sql2 = `SELECT value_ FROM characteristics WHERE characteristics.id = ${product_id}`;
-        // sqlDb.query(sql2, function(err, result2) {
-        //   if (err) callback(err, "fail to get data out");
-        //   else {
-        //     callback(null, result2);
-        //     // value.push(result2);
-        //     // return result2;
-        //   }
-        // });
-        // callback(null, value);
-      }
-    });
-
-    // let sql = `SELECT value_, review_url
-    //   FROM characteristics, review_photo
-    //   WHERE characteristics.id = review_photo.id AND review_id = ${product_id} `;
-
-    // sqlDb.query(sql, function(err, result) {
-    //   if (err) callback(err, "fail to get data out");
-    //   else {
-    //     let returnObj = {};
-    //     callback(null, result);
-    //   }
-    // });
-  },
-
   //TODO: need change
-  postReviews: (req, res, product_id, callback) => {
-    // let { reviews_id, review_url } = req.body;
-    // insertToPhoto(reviews_id, review_url, callback);
-
-    // let { characteristic_id, reviews_id, value_ } = req.body;
-    // insertToChara(characteristic_id, reviews_id, value_, callback);
-
-    let {
-      rating,
-      summary,
-      body,
-      recommend,
-      reported,
-      reviewer_name,
-      reviewer_email,
-      response,
-      helpfulness,
-      review_date
-    } = req.body;
-
-    review_date = review_date ? review_date : moment().format("YYYY-MM-DD");
-
-    let arr = [
-      product_id,
-      rating,
-      summary,
-      body,
-      recommend,
-      reported,
-      reviewer_name,
-      reviewer_email,
-      response,
-      helpfulness,
-      review_date
-    ];
-    // res.send(newdat);
-    // insertToReviews(arr, callback);
-  },
-
-  putHelpfulness: (req, res, review_id, callback) => {
-    let sql = `UPDATE reviews SET helpfulness = helpfulness +1 
-              WHERE reviews_id = ${review_id}`;
-    sqlDb.query(sql, err => {
-      if (err) callback(err);
-      else callback(null);
-    });
-  },
-
-  putReport: (req, res, review_id) => {},
-
-  createReviews: (req, res) => {}
+  // postReviews: (req, res, product_id, callback) => {
+  // let { reviews_id, review_url } = req.body;
+  // insertToPhoto(reviews_id, review_url, callback);
+  // let { characteristic_id, reviews_id, value_ } = req.body;
+  // insertToChara(characteristic_id, reviews_id, value_, callback);
+  //   let {
+  //     rating,
+  //     summary,
+  //     body,
+  //     recommend,
+  //     name,
+  //     email,
+  //     photos,
+  //     characteristics
+  //   } = req.body;
+  //   let review_date = moment().format("YYYY-MM-DD");
+  //   let response = "";
+  //   let arr = [
+  //     product_id,
+  //     rating,
+  //     summary,
+  //     body,
+  //     recommend,
+  //     name,
+  //     email,
+  //     response,
+  //     review_date
+  //   ];
+  //   // res.send(newdat);
+  //   // insertToReviews(arr, callback);
+  //   async.parallel(
+  //     [
+  //       function(callB) {
+  //         let sql = `INSERT INTO reviews ( product_id, rating, summary, body,  recommend,
+  //         reviewer_name,reviewer_email,response,review_date )
+  //         VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  //         sqlDb.query(sql, arr, function(err, result) {
+  //           if (err) callB(err, "fail to insert");
+  //           else callB(null);
+  //         });
+  //       }
+  //       // function(callB) {
+  //       //   let sql2 = `INSERT INTO reviews ( product_id, rating, summary, body,  recommend,
+  //       //     reviewer_name,reviewer_email,response,review_date ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  //       //   sqlDb.query(sql2, arr, function(err, result) {
+  //       //     if (err) callB(err, "fail to insert");
+  //       //     else {
+  //       //       callB(null, "1 record inserted ");
+  //       //     }
+  //       //   });
+  //       // }
+  //     ],
+  //     function(err, infor) {
+  //       if (err) callback(err, infor);
+  //       else callback(null, "1 record inserted ");
+  //     }
+  //   );
+  //   // optional callback)
+  // }
 };
 
 const findPhoto = async reviews_id => {
@@ -252,15 +103,15 @@ const findPhoto = async reviews_id => {
 //   });
 // };
 
-// const insertToReviews = (arr, callback) => {
-//   let sql = `INSERT INTO reviews ( product_id, rating, summary, body,  recommend,reported,
-//     reviewer_name,reviewer_email,response, helpfulness,review_date ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+const insertToReviews = (arr, callback) => {
+  let sql = `INSERT INTO reviews ( product_id, rating, summary, body,  recommend,reported,
+    reviewer_name,reviewer_email,response, helpfulness,review_date ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-//   sqlDb.query(sql, arr, function(err, result) {
-//     if (err) callback(err, "fail to insert");
-//     else callback(null, "1 record inserted ");
-//   });
-// };
+  sqlDb.query(sql, arr, function(err, result) {
+    if (err) callback(err, "fail to insert");
+    else callback(null, "1 record inserted ");
+  });
+};
 
 //id,product_id,rating,date,summary,body,recommend,reported,reviewer_name,reviewer_email,response,helpfulness
 //1,1,5,"2019-01-01","This product was great!",
