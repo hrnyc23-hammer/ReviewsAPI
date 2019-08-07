@@ -1,5 +1,6 @@
 const { getReviews, getRatings, postReviews } = require("./model.js");
-const { putHelpfulness, putReport } = require("./model.js");
+const { putHelpfulness, putReport, getCharacteristics } = require("./model.js");
+const model = require("./model.js");
 
 module.exports = {
   getReviews: (req, res, product_id) => {
@@ -12,12 +13,24 @@ module.exports = {
     });
   },
 
-  getRatings: (req, res, product_id) => {
-    getRatings(req, res, product_id, (err, data) => {
+  getMeta: (req, res, product_id) => {
+    getRatings(req, res, product_id, (err, obj1) => {
       if (err) {
         res.status(500);
       } else {
-        res.send(data);
+        getCharacteristics(req, res, product_id, (err, charac) => {
+          if (err) {
+            res.status(500);
+          } else {
+            let sendObj = {
+              product_id: product_id,
+              ratings: obj1.rating,
+              recommended: obj1.recommend,
+              characteristics: charac
+            };
+            res.send(sendObj);
+          }
+        });
       }
     });
   },
@@ -47,9 +60,9 @@ module.exports = {
     putReport(req, res, review_id, (err, data) => {
       if (err) {
         res.status(500);
-        console.log(err);
+        // console.log(err);
       } else {
-        res.send(data);
+        res.sendStatus(200);
       }
     });
   },

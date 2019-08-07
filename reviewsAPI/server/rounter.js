@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { getReviews, getRatings } = require("./controller.js");
+const { getReviews, getMeta } = require("./controller.js");
 const { postReviews, putReport } = require("./controller.js");
 const { putHelpfulness, createReviews } = require("./controller.js");
 
@@ -10,7 +10,7 @@ router.get("/:product_id/list", (req, res) => {
 
 //GET /reviews/:product_id/meta
 router.get("/:product_id/meta", (req, res) => {
-  getRatings(req, res, req.params.product_id);
+  getMeta(req, res, req.params.product_id);
 });
 
 //POST /reviews/:product_id

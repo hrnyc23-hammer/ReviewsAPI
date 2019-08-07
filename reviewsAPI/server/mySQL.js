@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 connection.connect(err => {
   if (err) console.log("fail to connect: ", process.env.MYSQL_DATABASE);
   else {
-    console.log("succuss connect to database!");
+    console.log("succuss connect to database: ", process.env.MYSQL_DATABASE);
   }
 
   // connection.query("CREATE DATABASE IF NOT EXISTS reviewsAPI", err => {

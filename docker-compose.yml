@@ -1,17 +1,22 @@
 version: "3"
 services:
   db:
-    build: ./db
+    # build: ./db
+    image: "mysql:5.7"
     environment:
       MYSQL_DATABASE: reviewapi
       MYSQL_ROOT_PASSWORD: 123
       MYSQL_USER: mysql
       MYSQL_PASSWORD: 123
       DATABASE_HOST: db
+    volumes:
+      - ./review_files:/docker-entrypoint-initdb.d/csv
+      - ./db/sql-scripts/createDatabase.sql:/docker-entrypoint-initdb.d/createDatabase.sql
+      - ./db/sql-scripts/insertForDocker.sql:/docker-entrypoint-initdb.d/insertForDocker.sql
   web:
     build: ./reviewsAPI
     environment:
-      FLASK_ENV: development
+      # FLASK_ENV: development
       DATABASE_HOST: db
       MYSQL_PORT: 3306
       MYSQL_DATABASE: reviewapi
@@ -19,8 +24,6 @@ services:
       MYSQL_PASSWORD: 123
     ports:
       - "5001:5000"
-    volumes:
-      - .:/code
     depends_on:
       - db
     restart: on-failure

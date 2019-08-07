@@ -1,11 +1,12 @@
-DROP DATABASE IF EXISTS reviewAPI;
+DROP DATABASE IF EXISTS reviewapi;
 
-CREATE DATABASE IF NOT EXISTS reviewAPI;
+CREATE DATABASE IF NOT EXISTS reviewapi;
 
-USE reviewAPI;
+USE reviewapi;
 
 DROP TABLE IF EXISTS reviews;
-
+-- id,product_id,rating,date,summary,body,recommend,
+-- reported,reviewer_name,reviewer_email,response,helpfulness
 CREATE TABLE reviews (
   reviews_id INTEGER AUTO_INCREMENT,
   product_id INTEGER NOT NULL,
@@ -13,8 +14,8 @@ CREATE TABLE reviews (
   review_date VARCHAR(50) NOT NULL,
   summary VARCHAR(200) NULL DEFAULT NULL,
   body VARCHAR(200) NULL DEFAULT NULL,
-  recommend INTEGER NULL DEFAULT 0,
-  reported INTEGER NULL DEFAULT 0,
+  recommend BOOLEAN NOT NULL DEFAULT 0,
+  reported BOOLEAN NOT NULL DEFAULT 0,
   reviewer_name VARCHAR(50) NOT NULL,
   reviewer_email VARCHAR(200) NULL DEFAULT NULL,
   response VARCHAR(200) NOT NULL,
@@ -42,8 +43,18 @@ CREATE TABLE characteristics (
   value_ INTEGER NOT NULL,
   PRIMARY KEY (id)
 );
+-- id,product_id,name
 
+DROP TABLE IF EXISTS chara_list;
 
--- ALTER TABLE `reviews` ADD FOREIGN KEY (product_id) REFERENCES `productId` (`id`);
--- ALTER TABLE `reviews` ADD FOREIGN KEY (email) REFERENCES `email` (`id`);
+CREATE TABLE chara_list (
+  id INTEGER AUTO_INCREMENT,
+  product_id INTEGER NOT NULL,
+  name_ VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+
+-- ALTER TABLE `review_photo` ADD FOREIGN KEY (reviews_id) REFERENCES `reviews` (`reviews_id`);
+
 -- ALTER TABLE `reviews` ADD FOREIGN KEY (characteristics) REFERENCES `characteristics` (`id`);
+-- ALTER TABLE `reviews` ADD FOREIGN KEY (email) REFERENCES `email` (`id`);
