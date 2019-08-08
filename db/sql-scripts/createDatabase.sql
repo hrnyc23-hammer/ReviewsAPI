@@ -20,7 +20,8 @@ CREATE TABLE reviews (
   reviewer_email VARCHAR(200) NULL DEFAULT NULL,
   response VARCHAR(200) NOT NULL,
   helpfulness INTEGER NOT NULL DEFAULT 0,
-  PRIMARY KEY (reviews_id)
+  PRIMARY KEY (reviews_id),
+  INDEX (product_id, reported) 
 );
 
 
@@ -30,7 +31,8 @@ CREATE TABLE review_photo (
   id INTEGER AUTO_INCREMENT,
   reviews_id INTEGER NOT NULL,
   review_url VARCHAR(200) NULL DEFAULT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  INDEX (reviews_id)
 );
 
 
@@ -41,7 +43,9 @@ CREATE TABLE characteristics (
   characteristic_id INTEGER NOT NULL,
   review_id INTEGER NOT NULL,
   value_ INTEGER NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  INDEX (review_id),
+  INDEX (characteristic_id)
 );
 -- id,product_id,name
 
@@ -51,7 +55,8 @@ CREATE TABLE chara_list (
   id INTEGER AUTO_INCREMENT,
   product_id INTEGER NOT NULL,
   name_ VARCHAR(50) NULL DEFAULT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  INDEX (product_id)
 );
 
 -- ALTER TABLE `review_photo` ADD FOREIGN KEY (reviews_id) REFERENCES `reviews` (`reviews_id`);

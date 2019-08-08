@@ -1,11 +1,11 @@
-LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/reviews_photos.csv' 
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/photoTest.csv' 
 INTO TABLE review_photo 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/reviews.csv' 
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/reviewsTest.csv' 
 INTO TABLE reviews 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
@@ -18,14 +18,14 @@ IGNORE 1 ROWS;
 --   SET recommend = (@recommend = true);
 --   SET reported = (@reported = true);
 
-LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/characteristic_reviews.csv' 
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/charaTest.csv' 
 INTO TABLE characteristics 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/characteristics.csv' 
+LOAD DATA LOCAL INFILE '/docker-entrypoint-initdb.d/csv/chara_listTest.csv' 
 INTO TABLE chara_list 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'

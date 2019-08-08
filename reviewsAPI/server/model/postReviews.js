@@ -10,17 +10,8 @@ module.exports = (req, res, product_id, callback) => {
   let response = "";
   let id_review;
 
-  let arrR = [
-    product_id,
-    rating,
-    summary,
-    body,
-    recommend,
-    name,
-    email,
-    response,
-    review_date
-  ];
+  let arrR = [product_id, rating, summary, body, recommend, name];
+  arrR.push(email, response, review_date);
 
   async.series(
     [
