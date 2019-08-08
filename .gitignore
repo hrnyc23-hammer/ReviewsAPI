@@ -3,5 +3,5 @@ config.js
 /coverage
 /review_files
 mysqlTest.txt
-exampleDB.js
 /db/DifferentDataBase
+/test
