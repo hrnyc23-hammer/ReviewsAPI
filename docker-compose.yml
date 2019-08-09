@@ -12,7 +12,7 @@ services:
     volumes:
       - ./review_files:/docker-entrypoint-initdb.d/csv
       - ./db/sql-scripts/createDatabase.sql:/docker-entrypoint-initdb.d/createDatabase.sql
-      - ./db/sql-scripts/insertForDocker.sql:/docker-entrypoint-initdb.d/insertForDocker.sql
+      - ./db/sql-scripts/insertForDocker.sql:/docker-entrypoint-initdb.d/csv/insertForDocker.sql
   web:
     build: ./reviewsAPI
     environment:
@@ -23,7 +23,7 @@ services:
       MYSQL_USER: mysql
       MYSQL_PASSWORD: 123
     ports:
-      - "80:5000"
+      - "80:80"
     depends_on:
       - db
     restart: on-failure
