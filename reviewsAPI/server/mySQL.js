@@ -1,5 +1,11 @@
 const mysql = require("mysql");
 const mysqlConfig = require("../config.js");
+// const redis = require("redis");
+
+//automaticall connects to localhost:6379
+// const client = redis.createClient();
+
+// const bigQuery = "SELECT first_name as name from actors where gender = 'M'";
 
 // const connection = mysql.createConnection({
 //   host: process.env.DATABASE_HOST,
@@ -17,8 +23,7 @@ const mysqlConfig = require("../config.js");
 // });
 
 const connection = mysql.createConnection(mysqlConfig);
-let mysql_info = `${mysqlConfig.database}, ${mysqlConfig.port}, ${
-  mysqlConfig.user
+let mysql_info = `${mysqlConfig.database}
 }`;
 
 connection.connect(err => {

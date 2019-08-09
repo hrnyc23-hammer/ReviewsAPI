@@ -3,29 +3,70 @@ const getRatings = require("./model/getRating.js");
 const postReviews = require("./model/postReviews");
 const getCharacteristics = require("./model/getCharacteristics.js");
 const { putHelpfulness, putReport } = require("./model/putReq.js");
+const cache = require("./model/redisCache.js");
 
 module.exports = {
+  //get review list from database
   getReviews: (req, res, product_id) => {
-    getReviewsList(req, res, product_id, (err, data) => {
-      if (err) res.status(500).send("fail to get data");
-      else res.send(data);
+    //run redis cache before query on database
+    cache.get(product_id, (err, data) => {
+      if (err) res.send(500);
+      console.log("data: ", data);
+      if (data) res.send(JSON.parse(data));
+      else {
+        //run query function on database
+        getReviewsList(req, res, product_id, (err, data) => {
+          if (err) res.status(500).send("fail to get data");
+          else {
+            data = JSON.stringify(data);
+            //set redis cache
+            cache.set(product_id, data, err => {
+              if (err) res.send(500);
+              else {
+                cache.expire(product_id, 20);
+                res.send(JSON.parse(data));
+              }
+            });
+          }
+        });
+      }
     });
   },
 
+  //get data for meta
   getMeta: (req, res, product_id) => {
-    getRatings(req, res, product_id, (err, obj1) => {
-      if (err) res.status(500);
+    //run redis cache before query on database
+    cache.get(product_id + "M", (err, meta) => {
+      if (err) res.send(500);
+      console.log("meta: ", meta);
+      if (meta) res.send(JSON.parse(meta));
       else {
-        getCharacteristics(req, res, product_id, (err, charac) => {
+        //get ratings from reviews database table
+        getRatings(req, res, product_id, (err, obj1) => {
           if (err) res.status(500);
           else {
-            let sendObj = {
-              product_id: product_id,
-              ratings: obj1.rating,
-              recommended: obj1.recommend,
-              characteristics: charac
-            };
-            res.send(sendObj);
+            //get characteristics on characteristics database table
+            getCharacteristics(req, res, product_id, (err, charac) => {
+              if (err) res.status(500);
+              else {
+                let sendObj = {
+                  product_id: product_id,
+                  ratings: obj1.rating,
+                  recommended: obj1.recommend,
+                  characteristics: charac
+                };
+                meta = JSON.stringify(sendObj);
+                //set redis cache after data query from database
+                //and send data back to client
+                cache.set(product_id + "M", meta, err => {
+                  if (err) res.send(500);
+                  else {
+                    cache.expire(product_id + "M", 20);
+                    res.send(JSON.parse(meta));
+                  }
+                });
+              }
+            });
           }
         });
       }

@@ -1,7 +1,12 @@
 const sqlDb = require("../mySQL");
 const async = require("async");
+// const cache = require("./cache");
 
 module.exports = (req, res, product_id, callback) => {
+  // cache.get(name, (err, age) => {
+  //   if (age !== null) return callback(age);
+  // });
+
   let sql = `SELECT * FROM reviews 
         WHERE product_id = ${product_id} 
         AND reported = 0  

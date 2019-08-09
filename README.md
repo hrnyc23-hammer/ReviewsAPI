@@ -24,9 +24,19 @@ mongo -->
 Locate your schema.sql file then run following command to create mysql database
 
 mysql -username -password
-source /home/user/..../schema.sql
-source /.../import[].sql
+source /home/user/..../db/sql-scripts/createDatabase.sql
+
+import csv data into mysql database
+source /home/user/..../db/sql-scripts/insertForDocker.sql
+
+
+create config.js file in ./reviewsAPI
 
 ## Start Server
 
-npm start
+Start Redis
+redis-server
+
+Start Server
+Run npm start in ./reviewsAPI
+
