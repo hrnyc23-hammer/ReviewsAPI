@@ -12,7 +12,7 @@ app.use(morgan("dev"));
 app.use("/", express.static(path.join(__dirname, "./app")));
 app.use("/reviews", Routes);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 80;
 
 app.listen(PORT, () => {
   console.log(`listening on PORT ${PORT}`);
