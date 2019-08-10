@@ -25,7 +25,7 @@ module.exports = (req, res, product_id, callback) => {
               for (let i = 0; i < result2.length; i++) {
                 sum += result2[i].value_;
               }
-              let avg = sum / result2.length;
+              let avg = (sum / result2.length).toFixed(4);
               value.push(avg);
               in_CB(null);
             }

@@ -32,11 +32,17 @@ source /home/user/..../db/sql-scripts/insertForDocker.sql
 
 create config.js file in ./reviewsAPI
 
+## Install and Start redis server
+
+Ubuntu system:
+    $ sudo apt update
+    $ sudo apt install redis-server
+
+Start Redis:
+    $ redis-server
+
+
 ## Start Server
-
-Start Redis
-redis-server
-
-Start Server
-Run npm start in ./reviewsAPI
+Start Server:
+   $ Run npm start in ./reviewsAPI
 
