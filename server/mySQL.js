@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-const mysqlConfig = require("../config.js");
+// const mysqlConfig = require("../config.js");
 
 // //run on docker
 const connection = mysql.createConnection({
