@@ -1,7 +1,18 @@
 version: "3"
 services:
+  # nginx:
+  #   image: nginx
+
+  # reverse-proxy:
+  #   image: traefik
+  #   command: --api --docker.exposedbydefault=false
+  #     ports:
+  #     - "80:80"
+  #     - "8000:8000"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
   db:
-    # build: ./db
     image: "mysql:5.7"
     environment:
       MYSQL_DATABASE: reviewapi
@@ -10,11 +21,17 @@ services:
       MYSQL_PASSWORD: 123
       DATABASE_HOST: db
     volumes:
-      - ./review_files:/docker-entrypoint-initdb.d/csv
-      - ./db/sql-scripts/createDatabase.sql:/docker-entrypoint-initdb.d/createDatabase.sql
-      - ./db/sql-scripts/insertForDocker.sql:/docker-entrypoint-initdb.d/csv/insertForDocker.sql
+      - ../review_files:/docker-entrypoint-initdb.d/csv
+      - ./db/createDatabase.sql:/docker-entrypoint-initdb.d/createDatabase.sql
+      - ./db/insertForDocker.sql:/docker-entrypoint-initdb.d/csv/insertForDocker.sql
+
+  redis:
+    image: redis:alpine
+
   web:
-    build: ./reviewsAPI
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       # FLASK_ENV: development
       DATABASE_HOST: db
@@ -22,8 +39,15 @@ services:
       MYSQL_DATABASE: reviewapi
       MYSQL_USER: mysql
       MYSQL_PASSWORD: 123
+      REDIS_HOST: redis
+    # volumes:
+    #   - ./:/app
+    # - /app/node_modules
     ports:
-      - "80:80"
+      - "8001:8000"
+
     depends_on:
       - db
+      - redis
+    # - nginx
     restart: on-failure

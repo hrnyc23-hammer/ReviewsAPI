@@ -1,8 +1,7 @@
-/reviewsAPI/node_modules
+/node_modules
 config.js
 /coverage
 /review_files
 mysqlTest.txt
-/db/DifferentDataBase
 /test
 bundle.js

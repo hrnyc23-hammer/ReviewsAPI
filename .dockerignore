@@ -1,0 +1,10 @@
+/node_modules/*
+npm-debug.log
+/test/*
+/review_fiels/*
+/db/*
+mysqlTest.txt
+.git
+.gitignore
+README.md
+*.csv

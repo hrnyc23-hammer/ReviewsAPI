@@ -95,6 +95,4 @@ module.exports = {
       else res.sendStatus(200);
     });
   }
-
-  // createReviews: (req, res) => {}
 };
