@@ -21,7 +21,7 @@ services:
       MYSQL_PASSWORD: 123
       DATABASE_HOST: db
     volumes:
-      - ../review_files:/docker-entrypoint-initdb.d/csv
+      - ../review_files2:/docker-entrypoint-initdb.d/csv
       - ./db/createDatabase.sql:/docker-entrypoint-initdb.d/createDatabase.sql
       - ./db/insertForDocker.sql:/docker-entrypoint-initdb.d/csv/insertForDocker.sql
 
