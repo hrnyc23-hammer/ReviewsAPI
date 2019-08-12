@@ -12,14 +12,14 @@ module.exports = {
     cache.get(product_id, (err, data) => {
       if (err) res.send(500);
       if (data) {
-        console.log("product_id:", product_id, " data: ", data);
+        // console.log("product_id:", product_id, " data: ", data);
         res.send(JSON.parse(data));
       } else {
         //run query function on database
         getReviewsList(req, res, product_id, (err, data) => {
           if (err) res.status(500).send("fail to get data");
           else {
-            console.log("data before cache: ", data);
+            // console.log("data before cache: ", data);
             data = JSON.stringify(data);
             //set redis cache
             cache.set(product_id, data, err => {
@@ -41,7 +41,7 @@ module.exports = {
     cache.get(product_id + "M", (err, meta) => {
       if (err) res.send(500);
       if (meta) {
-        console.log("meta: ", meta);
+        // console.log("meta: ", meta);
         res.send(JSON.parse(meta));
       } else {
         //get ratings from reviews database table

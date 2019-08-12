@@ -21,7 +21,7 @@ CREATE TABLE reviews (
   response VARCHAR(200) NOT NULL,
   helpfulness INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (reviews_id),
-  INDEX (product_id, reported) 
+  INDEX (product_id) 
 );
 
 

@@ -3,9 +3,9 @@ const async = require("async");
 
 module.exports = (req, res, product_id, callback) => {
   let sql = `SELECT * FROM reviews 
-        WHERE product_id = ${product_id} 
-        AND reported = 0  
-        LIMIT 5`;
+        WHERE product_id = ${product_id}`;
+  // AND reported = 0
+  // LIMIT 5;
 
   sqlDb.query(sql, function(err, result) {
     if (err) callback(null, "fail to get reviews data out");
