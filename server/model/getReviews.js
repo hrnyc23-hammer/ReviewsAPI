@@ -34,12 +34,18 @@ module.exports = (req, res, product_id, callback) => {
           if (err) callback(null, infor);
           else {
             for (let i = 0; i < result.length; i++) {
-              delete result[i].product_id;
-              result[i].data = result[i].review_date + "T00:00:00.000Z";
-              delete result[i].review_date;
-              result[i].photos = photos[i];
-              delete result[i].reviewer_email;
+              if (result[i] && result[i].reported === 1) {
+                result.splice(i, 1);
+                i -= 1;
+              } else if (result[i]) {
+                delete result[i].product_id;
+                result[i].data = result[i].review_date + "T00:00:00.000Z";
+                delete result[i].review_date;
+                result[i].photos = photos[i];
+                delete result[i].reviewer_email;
+              }
             }
+            sortByHelpful(result);
             returnObj.results = result;
             callback(null, returnObj);
           }
@@ -47,4 +53,20 @@ module.exports = (req, res, product_id, callback) => {
       );
     }
   });
+};
+
+const sortByHelpful = arr => {
+  let boolean = true;
+  while (boolean) {
+    boolean = false;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i + 1] && arr[i].helpfulness < arr[i + 1].helpfulness) {
+        let first = arr[i];
+        let second = arr[i + 1];
+        arr[i] = second;
+        arr[i + 1] = first;
+        boolean = true;
+      }
+    }
+  }
 };
