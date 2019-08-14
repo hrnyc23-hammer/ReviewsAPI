@@ -5,9 +5,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      # - ./php/content:/srv/www/content
-      # - ./static:/srv/www/static
-      # - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - web
@@ -32,59 +29,49 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      # FLASK_ENV: development
       DATABASE_HOST: db
       MYSQL_PORT: 3306
       MYSQL_DATABASE: reviewapi
       MYSQL_USER: mysql
       MYSQL_PASSWORD: 123
       REDIS_HOST: redis
-    # volumes:
-    #   - ./:/app
-    # - /app/node_modules
     ports:
       - "8000:8000"
     depends_on:
       - db
       - redis
     restart: on-failure
-
-  web2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      # FLASK_ENV: development
-      DATABASE_HOST: db
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: reviewapi
-      MYSQL_USER: mysql
-      MYSQL_PASSWORD: 123
-      REDIS_HOST: redis
-    # volumes:
-    #   - ./:/app
-    # - /app/node_modules
-    ports:
-      - "8002:8000"
-    depends_on:
-      - db
-      - redis
-    restart: on-failure
-
-  web3:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      DATABASE_HOST: db
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: reviewapi
-      MYSQL_USER: mysql
-      MYSQL_PASSWORD: 123
-      REDIS_HOST: redis
-    ports:
-      - "8003:8000"
-    depends_on:
-      - db
-      - redis
-    restart: on-failure
+  # web2:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     DATABASE_HOST: db
+  #     MYSQL_PORT: 3306
+  #     MYSQL_DATABASE: reviewapi
+  #     MYSQL_USER: mysql
+  #     MYSQL_PASSWORD: 123
+  #     REDIS_HOST: redis
+  #   ports:
+  #     - "8002:8000"
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   restart: on-failure
+  # web3:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     DATABASE_HOST: db
+  #     MYSQL_PORT: 3306
+  #     MYSQL_DATABASE: reviewapi
+  #     MYSQL_USER: mysql
+  #     MYSQL_PASSWORD: 123
+  #     REDIS_HOST: redis
+  #   ports:
+  #     - "8003:8000"
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   restart: on-failure
